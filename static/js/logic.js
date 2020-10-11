@@ -1,6 +1,9 @@
-// mapbox accessToken:apiKey
 
-//base layer of map(s)
+
+
+
+// mapbox accessToken:apiKey
+//tile layers variables of map(s)
 var mapGrayScale = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
     accessToken:apiKey
 });
@@ -14,13 +17,15 @@ var mapOutdoors = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-
 });
 
 var map = L.map("#map", {
-    center: [40, -96],
+    center: [38, -96],
     zoom: 6,
     layers: [mapGrayScale, mapSatellite, mapOutdoors]
   });
 
 //data objects for map layer
 mapGrayScale.addTo(map);
+
+
 
 //layer(s) to map
 var mapLayers = {
@@ -30,7 +35,13 @@ var mapLayers = {
   };
 
 //desired datasets
+var earthquakeData = new L.LayerGroup();
 
+var dataOnMaps = {
+    "Earthquakes": earthquakeData
+};
 
-
-
+L
+  .control
+  .layers(mapLayers, dataOnMaps)
+  .addTo(map);
