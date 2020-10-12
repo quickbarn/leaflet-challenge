@@ -17,3 +17,44 @@ mapGrayScale.addTo(map);
 
 //layer for earthquake data from USGS
 var earthquakeData = new L.layerGroup();
+
+ // d3 pull for geoJson from USGS
+ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", function(data) {
+     function styleFxn(feature) {
+         return {
+             opacity:.75,
+             fillOpacity:1,
+             fillColor: colorFxn(feature.properties.mag),
+             color: "#000000",
+             radius: radiusFxn(features.preoperties.mag),
+             stroke:true, 
+             weight: 1
+         };
+     };
+// Color function for earthquake scale, color palette from color-hex.com/color-palette/27541
+
+function colorFxn(mag) {
+    switch (true){
+        case mag > 5:
+            return "#ee3e32";
+    ​    case mag > 4:
+            return "#f68838";
+    ​    case mag > 3:
+            return "#fbb021";
+    ​    case mag > 2:
+            return "#1b8a5a";
+    ​    case mag > 1:
+            return "#1d4877";
+    ​    default:
+            return "#1d4877";
+   }
+  }
+
+  // define the radius of the earthquake marker based on its magnitude.
+  function getRadius(mag) {
+    if (mag === 0) {
+      return 1;
+    }
+
+    return mag * 2;
+  }
