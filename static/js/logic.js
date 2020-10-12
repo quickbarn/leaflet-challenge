@@ -24,9 +24,9 @@ var earthquakeData = new L.layerGroup();
          return {
              opacity:.75,
              fillOpacity:1,
-             fillColor: colorFxn(feature.properties.mag),
+             fillColor: colorFxn(features.properties.mag),
              color: "#000000",
-             radius: radiusFxn(features.preoperties.mag),
+             radius: radiusFxn(features.properties.mag),
              stroke:true, 
              weight: 1
          };
@@ -47,14 +47,27 @@ function colorFxn(mag) {
             return "#1d4877";
     ​    default:
             return "#1d4877";
-   }
-  }
+   };
+};
 
   // define the radius of the earthquake marker based on its magnitude.
-  function getRadius(mag) {
+  function radiusFxn(mag) {
     if (mag === 0) {
       return 1;
     }
 
     return mag * 2;
   }
+
+//geoJson to map layers
+L.geoJson(data, {
+    pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng);
+    },
+    style: styleFxn,
+    onEachFeature: function(feature, layer) {
+        layer.bindPopup("Mag: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
+    }
+}).addTo(earthquakeData);
+
+earthquakeData.addTo(map);
